@@ -1,6 +1,7 @@
 from fractions import Fraction
 
 class Rational(Fraction):
+    """
     def __init__(self, numer=0, denom=1):
         # print("in the ctor\n")
             
@@ -14,11 +15,13 @@ class Rational(Fraction):
         
         self.numer = numer//gcd(numer, denom)
         self.denom = denom//gcd(numer, denom)
+    """
+    
+    def __str__(self):
+        print("******CALLING OVERLOAD*******")
+        return "{}/{}".format(self.numerator, self.denominator)
     
     """
-    def __str__(self):
-        return "{}/{}".format(self.numer, self.denom)
-    
     def numerator(self):
         # print("in numerator\n")
         return self.numer
@@ -27,11 +30,18 @@ class Rational(Fraction):
         # print("in denominator\n")
         return self.denom
     
-    def __add__(self):
-        pass
+    def __add__(self, other):
+        # if isinstance(other, str):
+        #     print("Triggered isinstance str catch")
+        #     numer, denom = [eval(x) for x in other.split('/')]
+        #     return self.__class__(self.numer+numer, self.denom+denom)
+        if isinstance(other, int):
+            
+        return Rational(self.numer+other.numer, self.denom+other.denom)
     
-    def __iadd__(self):
-        pass
+    def __iadd__(self, other):
+        self = self.__add__(other)
+        return self
     
     def __mul__(self):
         pass
@@ -44,6 +54,7 @@ class Rational(Fraction):
     
     def __isub__(self):
         pass
+    
     """
 
 # Note that the numerator and the denominator of the rational numbers

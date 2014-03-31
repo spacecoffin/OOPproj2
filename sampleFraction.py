@@ -1,11 +1,11 @@
-from rational import Rational
+from fractions import Fraction
 
 def main():
-    first = Rational()
+    first = Fraction()
     print ('first:  ', first)
-    second = Rational(4)
+    second = Fraction(4)
     print ('second:  ', second)
-    third = Rational(25,10)
+    third = Fraction(25,10)
     # print ("third:  {0}/{1}".format(third.numerator(), third.denominator()))
 
     first += third
@@ -14,7 +14,7 @@ def main():
     print ('third:  ', third)
     third /= first
     print ('third:  ', third)
-    fourth = Rational(18,158)
+    fourth = Fraction(18,158)
     print ('fourth:  ', fourth)
     third -= fourth
     print ('third:  ', third)
@@ -22,10 +22,10 @@ def main():
     print ('fourth:  ', fourth)
     
     if fourth == third:
-        print ('The two rationals are the same')
+        print ('The two Fractions are the same')
     elif fourth > third:
-       print ('fourth rational is greater than the third rational')
+       print ('fourth Fraction is greater than the third Fraction')
     else:
-       print ('fourth rational is smaller than the third rational')
+       print ('fourth Fraction is smaller than the third Fraction')
 
 main()
