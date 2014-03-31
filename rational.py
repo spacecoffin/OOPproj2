@@ -138,7 +138,7 @@ class Rational(Fraction):
 
     def __bool__(self):
         """a != 0"""
-        return a._numerator != 0
+        return self.numer != 0
 
 # Note that the numerator and the denominator of the rational numbers
 # must be reduced to their smallest possible values. It may be helpful
