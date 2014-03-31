@@ -4,7 +4,15 @@ class Dictionary:
         # file words.dat into a data structure that can be quickly
         # searched.
         dict_file = open("words.dat")
+        self.dict_set = set()
         for word in dict_file:
-            dict_list = []
-            dict_list.append(dict_file.readline(word))
-        return dict_list
+            word = word.rstrip()
+            self.dict_set.add(word)
+    
+    def print(self):
+        print(self.dict_set)
+       
+    
+if __name__ == '__main__':
+    marvin = Dictionary()
+    marvin.print()
