@@ -1,29 +1,50 @@
-class Rational:
+from fractions import Fraction
+
+class Rational(Fraction):
     def __init__(self, numer=0, denom=1):
-        print("in the ctor\n")
-        self.numer = numer
-        self.denom = denom
+        # print("in the ctor\n")
+            
+        def gcd(numer, denom):
+            # print("in gcd\n")
+            if numer == denom:
+                return denom
+            elif numer%denom == 0:
+                return denom
+            return gcd(denom, numer%denom)
         
-    @staticmethod
-    def gcd(numer, denom):
-        print("in gcd\n")
-        if numer == denom:
-            return denom
-        elif numer%denom == 0:
-            return denom
-        return gcd(denom, numer%denom)
+        self.numer = numer//gcd(numer, denom)
+        self.denom = denom//gcd(numer, denom)
     
+    """
     def __str__(self):
-        # print("in __str__\n")
         return "{}/{}".format(self.numer, self.denom)
     
     def numerator(self):
-        print("in numerator\n")
-        return self.numer/gcd(self.numer, self.denom)
+        # print("in numerator\n")
+        return self.numer
     
     def denominator(self):
-        print("in denominator\n")
-        return self.denom/gcd(self.numer, self.denom)
+        # print("in denominator\n")
+        return self.denom
+    
+    def __add__(self):
+        pass
+    
+    def __iadd__(self):
+        pass
+    
+    def __mul__(self):
+        pass
+    
+    def __imul__(self):
+        pass
+    
+    def __sub__(self):
+        pass
+    
+    def __isub__(self):
+        pass
+    """
 
 # Note that the numerator and the denominator of the rational numbers
 # must be reduced to their smallest possible values. It may be helpful
