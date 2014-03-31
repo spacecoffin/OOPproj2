@@ -1,7 +1,4 @@
-from fractions import Fraction
-
-class Rational(Fraction):
-    """
+class Rational():
     def __init__(self, numer=0, denom=1):
         # print("in the ctor\n")
             
@@ -15,13 +12,10 @@ class Rational(Fraction):
         
         self.numer = numer//gcd(numer, denom)
         self.denom = denom//gcd(numer, denom)
-    """
     
     def __str__(self):
-        print("******CALLING OVERLOAD*******")
-        return "{}/{}".format(self.numerator, self.denominator)
+        return "{}/{}".format(self.numer, self.denom)
     
-    """
     def numerator(self):
         # print("in numerator\n")
         return self.numer
@@ -36,7 +30,7 @@ class Rational(Fraction):
         #     numer, denom = [eval(x) for x in other.split('/')]
         #     return self.__class__(self.numer+numer, self.denom+denom)
         if isinstance(other, int):
-            
+            re
         return Rational(self.numer+other.numer, self.denom+other.denom)
     
     def __iadd__(self, other):
@@ -54,8 +48,6 @@ class Rational(Fraction):
     
     def __isub__(self):
         pass
-    
-    """
 
 # Note that the numerator and the denominator of the rational numbers
 # must be reduced to their smallest possible values. It may be helpful
