@@ -6,7 +6,7 @@ def main():
     second = Rational(4)
     print ('second:  ', second)
     third = Rational(25,10)
-    # print ("third:  {0}/{1}".format(third.numerator(), third.denominator()))
+    print ("third:  {0}/{1}".format(third.numerator(), third.denominator()))
 
     first += third
     print ('first:  ', first)

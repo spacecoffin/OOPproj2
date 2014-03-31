@@ -1,7 +1,9 @@
-class Rational():
+from fractions import Fraction
+
+class Rational(Fraction):    
     def __init__(self, numer=0, denom=1):
         # print("in the ctor\n")
-            
+        
         def gcd(numer, denom):
             # print("in gcd\n")
             if numer == denom:
@@ -10,6 +12,7 @@ class Rational():
                 return denom
             return gcd(denom, numer%denom)
         
+        g = gcd(numer, denom)
         self.numer = numer//gcd(numer, denom)
         self.denom = denom//gcd(numer, denom)
     
@@ -23,31 +26,65 @@ class Rational():
     def denominator(self):
         # print("in denominator\n")
         return self.denom
-    
+
     def __add__(self, other):
         # if isinstance(other, str):
         #     print("Triggered isinstance str catch")
         #     numer, denom = [eval(x) for x in other.split('/')]
         #     return self.__class__(self.numer+numer, self.denom+denom)
+        if isinstance(other, Rational):
+            return Rational(self.numer*other.denom + other.numer*self.denom, self.denom*other.denom)
         if isinstance(other, int):
-            re
-        return Rational(self.numer+other.numer, self.denom+other.denom)
+            return Rational(self.numer + other*self.denom, self.denom)
+        return Rational(self.numer*other.denom + other.numer*self.denom, self.denom*other.denom) 
     
     def __iadd__(self, other):
         self = self.__add__(other)
         return self
     
-    def __mul__(self):
-        pass
+    def __mul__(self, other):
+        if isinstance(other, Rational):
+            return Rational(self.numer*other.numer, self.denom*other.denom)
+        if isinstance(other, int):
+            return Rational(self.numer*other, self.denom)
+        return Rational(self.numer*other.numer, self.denom*other.denom)
     
-    def __imul__(self):
-        pass
+    def __imul__(self, other):
+        self = self.__mul__(other)
+        return self
     
-    def __sub__(self):
-        pass
+    def __sub__(self, other):
+        if isinstance(other, Rational):
+            return Rational(self.numer*other.denom - other.numer*self.denom, self.denom*other.denom)
+        if isinstance(other, int):
+            return Rational(self.numer - other*self.denom, self.denom)
+        return Rational(self.numer*other.denom - other.numer*self.denom, self.denom*other.denom)
     
-    def __isub__(self):
-        pass
+    def __isub__(self, other):
+        self = self.__sub__(other)
+        return self
+    
+    def __floordiv__(self, other):
+        if isinstance(other, Rational):
+            return Rational(self.numer*other.denom, self.denom*other.numer)
+        if isinstance(other, int):
+            return Rational(self.numer, self.denom*other)
+        return Rational(self.numer*other.denom, self.denom*other.numer)        
+
+    def __truediv__(self, other):
+        if isinstance(other, Rational):
+            return Rational(self.numer*other.denom, self.denom*other.numer)
+        if isinstance(other, int):
+            return Rational(self.numer, self.denom*other)
+        return Rational(self.numer*other.denom, self.denom*other.numer)
+    
+    def __ifloordiv__(self, other):
+        self = self.__floordiv__(other)
+        return self
+    
+    def __itruediv__(self, other):
+        self = self.__truediv__(other)
+        return self
 
 # Note that the numerator and the denominator of the rational numbers
 # must be reduced to their smallest possible values. It may be helpful
