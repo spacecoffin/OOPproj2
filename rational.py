@@ -85,6 +85,60 @@ class Rational(Fraction):
     def __itruediv__(self, other):
         self = self.__truediv__(other)
         return self
+    
+    """
+    def _richcmp(self, other, op):
+        Helper for comparison operators, for internal use only.
+
+        Implement comparison between a Rational instance `self`, and
+        either another Rational instance or a float `other`.  If
+        `other` is not a Rational instance or a float, return
+        NotImplemented. `op` should be one of the six standard
+        comparison operators.
+
+        
+        # convert other to a Rational instance where reasonable.
+        if isinstance(other, numbers.Rational):
+            return op(self._numerator * other.denominator,
+                      self._denominator * other.numerator)
+        if isinstance(other, float):
+            if math.isnan(other) or math.isinf(other):
+                return op(0.0, other)
+            else:
+                return op(self, self.from_float(other))
+        else:
+            return NotImplemented
+    """
+    
+    
+
+    def __lt__(self, other):
+        """a < b"""
+        if isinstance(other, Rational):
+            return (self.numer*other.denom) < (self.denom*other.numer)
+        return NotImplemented
+
+    def __gt__(self, other):
+        """a > b"""
+        if isinstance(other, Rational):
+            return (self.numer*other.denom) > (self.denom*other.numer)
+        return NotImplemented
+
+    def __le__(self, other):
+        """a <= b"""
+        if isinstance(other, Rational):
+            return (self.numer*other.denom) <= (self.denom*other.numer)
+        return NotImplemented
+
+    def __ge__(self, other):
+        """a >= b"""
+        if isinstance(other, Rational):
+            return (self.numer*other.denom) >= (self.denom*other.numer)
+        return NotImplemented
+
+    def __bool__(self):
+        """a != 0"""
+        return a._numerator != 0
 
 # Note that the numerator and the denominator of the rational numbers
 # must be reduced to their smallest possible values. It may be helpful
