@@ -4,9 +4,6 @@
 
 import re
 
-def reader():
-    pass
-
 def main():
         # The program buildDict should begin by asking the user for a
         # list of text files to read from. The user should respond by
