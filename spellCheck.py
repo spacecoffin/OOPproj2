@@ -6,8 +6,10 @@ class Dictionary:
         # This program should start by reading the list of words in the
         # file words.dat into a data structure that can be quickly
         # searched.
-        dict_file = open("words.dat")
         self.dict_set = set()
+        self.ignore_set = set()
+        self.replace_dict = {}
+        dict_file = open("words.dat")
         for word in dict_file:
             word = word.rstrip()
             self.dict_set.add(word)
@@ -42,6 +44,28 @@ class Dictionary:
         elif update_cmd == 'p':
             self.replace_dict[add_word] = replacement
     
+    def user_prompt():
+        while True:
+            user_cmd = input("""replace(R), replace all(P), ignore(I),
+                                ignore all(N), exit(E): """)
+            user_cmd = user_cmd.lower()
+            if user_cmd == 'i':
+                break
+            if user_cmd == 'r':
+                replacement_word = input("Replacement word: ")
+                split_line[word] = replacement_word
+                break
+            if user_cmd == 'n':
+                this_dict.update('n', word)
+                break
+            if user_cmd == 'p':
+                replacement_word = input("Replacement word: ")
+                split_line[word] = replacement_word
+                this_dict.update('p', word, replacement=replacement_word)
+                break
+            if user_cmd == 'e':
+                raise ExitByUser
+
     def __iter__(self):
         return self
     
@@ -50,17 +74,6 @@ class Dictionary:
     
     def print(self):
         print(self.dict_set)
-
-        """
-        if 'a' in self.dict_set:
-            print("a is in it")
-        if 'i' in self.dict_set:
-            print("I is in it")
-        if 'o' in self.dict_set:
-            print("O is in it")
-        if 'zz' in self.dict_set:
-            print("bazooka is in it")
-        """
 
 if __name__ == '__main__':
     this_dict = Dictionary()
@@ -74,10 +87,8 @@ if __name__ == '__main__':
             split_line = re.split(r'[^a-z]+', line, flags=re.IGNORECASE)
             for word in split_line:
                 if len(word) >= 2:
-                    this_dict.verify(word)
-                    # if word not in this_dict.dict_set:
-                        # print("{} ain't in it.".format(word))
-                        # input("replace(R), replace all(P), ignore(I), ignore all(N), exit(E): ")
+                    if not this_dict.verify(word):
+                        this_dict.user_prompt
                 else:
                     continue
             else:
@@ -86,5 +97,9 @@ if __name__ == '__main__':
     except IOError:
         # FileNotFoundError IS NEW FOR 3.3! 3.2 uses IOError!
         print("***Unable to read file \'{}\'!***\n".format(f))
+    except ExitByUser:
+        # User chose 'e' to exit in prompt
+        print('/n')
+        # CLEANUP ACTIONS HERE
     
     
