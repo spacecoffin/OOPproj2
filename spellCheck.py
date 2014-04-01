@@ -44,24 +44,25 @@ class Dictionary:
         elif update_cmd == 'p':
             self.replace_dict[add_word] = replacement
     
-    def user_prompt():
+    def user_prompt(self, word, index):
+        print("\n{:^62}".format(word))
+        prompt = "replace(R), replace all(P), ignore(I), ignore all(N), exit(E): "
         while True:
-            user_cmd = input("""replace(R), replace all(P), ignore(I),
-                                ignore all(N), exit(E): """)
+            user_cmd = input(prompt)
             user_cmd = user_cmd.lower()
             if user_cmd == 'i':
                 break
             if user_cmd == 'r':
                 replacement_word = input("Replacement word: ")
-                split_line[word] = replacement_word
+                split_line[index] = replacement_word
                 break
             if user_cmd == 'n':
-                this_dict.update('n', word)
+                this_dict.update('n', index)
                 break
             if user_cmd == 'p':
                 replacement_word = input("Replacement word: ")
-                split_line[word] = replacement_word
-                this_dict.update('p', word, replacement=replacement_word)
+                split_line[index] = replacement_word
+                this_dict.update('p', index, replacement=replacement_word)
                 break
             if user_cmd == 'e':
                 raise ExitByUser
@@ -71,35 +72,43 @@ class Dictionary:
     
     def __next__(self):
         pass
-    
-    def print(self):
-        print(self.dict_set)
+
+class ExitByUser(Exception):
+    pass
+
+def parse_line(line):
+    word_list = []
+    for word in split_line:
+        if len(word) >= 2:
+            word_list.append(word)
+        else:
+            continue
+    return word_list
 
 if __name__ == '__main__':
     this_dict = Dictionary()
-    # Prompt user for the name of a document she wants spell-checked.
-    file_name = input("Name of the document to be spell-checked: ")
     try:
+        # Prompt user for the name of a document she wants spell-checked.
+        file_name = input("Name of the document to be spell-checked: ")
         file = open(file_name)
         # spellCheck should read words from the specified document,
         # one-by-one and test if the words appears in its dictionary.
         for line in file.readlines():
             split_line = re.split(r'[^a-z]+', line, flags=re.IGNORECASE)
-            for word in split_line:
-                if len(word) >= 2:
-                    if not this_dict.verify(word):
-                        this_dict.user_prompt
+            word_list = parse_line(split_line)
+            index = 0
+            for word in word_list:
+                if not this_dict.verify(word):
+                    this_dict.user_prompt(word, index)
                 else:
+                    index += 1
                     continue
             else:
                 continue
-            
     except IOError:
         # FileNotFoundError IS NEW FOR 3.3! 3.2 uses IOError!
         print("***Unable to read file \'{}\'!***\n".format(f))
     except ExitByUser:
         # User chose 'e' to exit in prompt
-        print('/n')
         # CLEANUP ACTIONS HERE
-    
-    
+        pass
