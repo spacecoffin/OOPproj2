@@ -10,10 +10,8 @@ def main():
         # typing the file names as [filename1] [white space] [filename2]
         # [white space] [filename3]...
     inputList = input(
-        "Please enter the name[s] of the file[s] (including the file-type \
-        extension) from which to create the dictionary. \n\n If entering more \
-        than one name, please separate each name by a space.\n\n"
-        ).split() # formatting prints fucked up
+        "Please enter the name[s] of the file[s] (including the file-type extension) from which to create the dictionary. \n\n If entering more than one name, please separate each name by a space.\n\n"
+        ).split()
     word_list = []
     for f in inputList:
         try:

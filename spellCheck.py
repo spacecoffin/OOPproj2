@@ -1,5 +1,4 @@
 import re
-import fileinput
 
 class Dictionary:
     def __init__(self):
@@ -40,45 +39,9 @@ class Dictionary:
         # user input of P or p and N or n.
         update_cmd = update_cmd.lower()
         if update_cmd == 'n':
-            self.ignore_set.add(add_word)
+            self.ignore_set.add(add_word.lower())
         elif update_cmd == 'p':
-            self.replace_dict[add_word] = replacement
-    
-    def user_prompt(self, word, index, line):
-        print("\n{:^62}".format(word))
-        prompt = "replace(R), replace all(P), ignore(I), ignore all(N), exit(E): "
-        while True:
-            user_cmd = input(prompt)
-            user_cmd = user_cmd.lower()
-            if user_cmd == 'i':
-                return line
-                break
-            elif user_cmd == 'r':
-                replacement_word = input("Replacement word: ")
-                line = re.sub(word, replacement_word, line, flags=re.IGNORECASE)
-                return line
-                break
-            elif user_cmd == 'n':
-                this_dict.update('n', index)
-                return line
-                break
-            elif user_cmd == 'p':
-                replacement_word = input("Replacement word: ")
-                line = re.sub(word, replacement_word, line, flags=re.IGNORECASE)
-                this_dict.update('p', word, replacement=replacement_word)
-                return line
-                break
-            elif user_cmd == 'e':
-                return line
-                raise ExitByUser
-            else:
-                continue
-
-    def __iter__(self):
-        return self
-    
-    def __next__(self):
-        pass
+            self.replace_dict[add_word.lower()] = replacement
 
 class ExitByUser(Exception):
     pass
@@ -100,11 +63,11 @@ def parse_line(line):
 
 if __name__ == '__main__':
     this_dict = Dictionary()
+    output_string = ''
     try:
         # Prompt user for the name of a document she wants spell-checked.
         file_name = input("Name of the document to be spell-checked: ")
         file = open(file_name)
-        output_string = ''
         # spellCheck should read words from the specified document,
         # one-by-one and test if the words appears in its dictionary.
         for line in file.readlines():
@@ -112,7 +75,35 @@ if __name__ == '__main__':
             index = 0
             for word in word_list:
                 if not this_dict.verify(word):
-                    line = this_dict.user_prompt(word, index, line)
+                    def user_prompt(word, index, line, dict_name):
+                        print("\n{:^62}".format(word))
+                        prompt = "replace(R), replace all(P), ignore(I), ignore all(N), exit(E): "
+                        while True:
+                            user_cmd = input(prompt)
+                            user_cmd = user_cmd.lower()
+                            if user_cmd == 'i':
+                                return line
+                                break
+                            elif user_cmd == 'r':
+                                replacement_word = input("Replacement word: ")
+                                line = re.sub(word, replacement_word, line, flags=re.IGNORECASE)
+                                return line
+                                break
+                            elif user_cmd == 'n':
+                                dict_name.update('n', word)
+                                return line
+                                break
+                            elif user_cmd == 'p':
+                                replacement_word = input("Replacement word: ")
+                                line = re.sub(word, replacement_word, line, flags=re.IGNORECASE)
+                                dict_name.update('p', word, replacement=replacement_word)
+                                return line
+                                break
+                            elif user_cmd == 'e':
+                                raise ExitByUser
+                            else:
+                                continue
+                    line = user_prompt(word, index, line, this_dict)
                 else:
                     index += 1
                     continue
@@ -129,10 +120,9 @@ if __name__ == '__main__':
         print("***Unable to read file \'{}\'!***\n".format(file_name))
     except ExitByUser:
         # User chose 'e' to exit in prompt
-        # CLEANUP ACTIONS HERE
         pass
     finally:
-        print(output_string)
         file.close()
+        print(output_string)
         output = open(file_name, 'w')
         output.write(output_string)

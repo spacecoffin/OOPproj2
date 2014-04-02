@@ -2,10 +2,8 @@ from fractions import Fraction
 
 class Rational(Fraction):    
     def __init__(self, numer=0, denom=1):
-        # print("in the ctor\n")
         
         def gcd(numer, denom):
-            # print("in gcd\n")
             if numer == denom:
                 return denom
             elif numer%denom == 0:
@@ -20,18 +18,12 @@ class Rational(Fraction):
         return "{}/{}".format(self.numer, self.denom)
     
     def numerator(self):
-        # print("in numerator\n")
         return self.numer
     
     def denominator(self):
-        # print("in denominator\n")
         return self.denom
 
     def __add__(self, other):
-        # if isinstance(other, str):
-        #     print("Triggered isinstance str catch")
-        #     numer, denom = [eval(x) for x in other.split('/')]
-        #     return self.__class__(self.numer+numer, self.denom+denom)
         if isinstance(other, Rational):
             return Rational(self.numer*other.denom + other.numer*self.denom, self.denom*other.denom)
         if isinstance(other, int):
@@ -86,32 +78,6 @@ class Rational(Fraction):
         self = self.__truediv__(other)
         return self
     
-    """
-    def _richcmp(self, other, op):
-        Helper for comparison operators, for internal use only.
-
-        Implement comparison between a Rational instance `self`, and
-        either another Rational instance or a float `other`.  If
-        `other` is not a Rational instance or a float, return
-        NotImplemented. `op` should be one of the six standard
-        comparison operators.
-
-        
-        # convert other to a Rational instance where reasonable.
-        if isinstance(other, numbers.Rational):
-            return op(self._numerator * other.denominator,
-                      self._denominator * other.numerator)
-        if isinstance(other, float):
-            if math.isnan(other) or math.isinf(other):
-                return op(0.0, other)
-            else:
-                return op(self, self.from_float(other))
-        else:
-            return NotImplemented
-    """
-    
-    
-
     def __lt__(self, other):
         """a < b"""
         if isinstance(other, Rational):
@@ -146,5 +112,32 @@ class Rational(Fraction):
 # two numbers. You can make this a nested function in the constructor
 # for the Rational class.
 
-# if __name__ == "__main__":
-#     print(Rational(4))
+if __name__ == '__main__':
+    from rational import Rational
+
+    first = Rational()
+    print ('first:  ', first)
+    second = Rational(4)
+    print ('second:  ', second)
+    third = Rational(25,10)
+    print ("third:  {0}/{1}".format(third.numerator(), third.denominator()))
+
+    first += third
+    print ('first:  ', first)
+    third *= 8
+    print ('third:  ', third)
+    third /= first
+    print ('third:  ', third)
+    fourth = Rational(18,158)
+    print ('fourth:  ', fourth)
+    third -= fourth
+    print ('third:  ', third)
+    fourth = first + second
+    print ('fourth:  ', fourth)
+    
+    if fourth == third:
+        print ('The two rationals are the same')
+    elif fourth > third:
+       print ('fourth rational is greater than the third rational')
+    else:
+       print ('fourth rational is smaller than the third rational')
