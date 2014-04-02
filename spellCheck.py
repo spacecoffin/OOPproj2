@@ -54,14 +54,14 @@ class Dictionary:
                 break
             elif user_cmd == 'r':
                 replacement_word = input("Replacement word: ")
-                split_line[index] = replacement_word
+                word_list[index] = replacement_word
                 break
             elif user_cmd == 'n':
                 this_dict.update('n', index)
                 break
             elif user_cmd == 'p':
                 replacement_word = input("Replacement word: ")
-                split_line[index] = replacement_word
+                word_list[index] = replacement_word
                 this_dict.update('p', word, replacement=replacement_word)
                 break
             elif user_cmd == 'e':
@@ -99,8 +99,7 @@ if __name__ == '__main__':
         # Prompt user for the name of a document she wants spell-checked.
         file_name = input("Name of the document to be spell-checked: ")
         file = open(file_name)
-        file_out_name = file_name + '.tmp'
-        output = open(file_out_name, 'w')
+        output_string = ''
         # spellCheck should read words from the specified document,
         # one-by-one and test if the words appears in its dictionary.
         for line in file.readlines():
@@ -113,13 +112,12 @@ if __name__ == '__main__':
                     index += 1
                     continue
             else:
-                for 
-                """
-                for replacement in this_dict.replace_dict():
-                    this_dict.replace_dict[]
-                    checked_line = re.sub()
-                output.write(checked_line)
-                """
+                checked_line = line
+                for key in this_dict.replace_dict.keys():
+                    repl = this_dict.replace_dict.get(key)
+                    checked_line = re.sub(key, repl, checked_line, \
+                                          flags=re.IGNORECASE)
+                output_string += checked_line
                 continue
     except IOError:
         # FileNotFoundError IS NEW FOR 3.3! 3.2 uses IOError!
@@ -128,3 +126,8 @@ if __name__ == '__main__':
         # User chose 'e' to exit in prompt
         # CLEANUP ACTIONS HERE
         pass
+    finally:
+        print(output_string)
+        file.close()
+        output = open(file_name, 'w')
+        output.write(output_string)
