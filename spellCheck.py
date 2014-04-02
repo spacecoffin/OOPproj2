@@ -44,27 +44,32 @@ class Dictionary:
         elif update_cmd == 'p':
             self.replace_dict[add_word] = replacement
     
-    def user_prompt(self, word, index):
+    def user_prompt(self, word, index, line):
         print("\n{:^62}".format(word))
         prompt = "replace(R), replace all(P), ignore(I), ignore all(N), exit(E): "
         while True:
             user_cmd = input(prompt)
             user_cmd = user_cmd.lower()
             if user_cmd == 'i':
+                return line
                 break
             elif user_cmd == 'r':
                 replacement_word = input("Replacement word: ")
-                word_list[index] = replacement_word
+                line = re.sub(word, replacement_word, line, flags=re.IGNORECASE)
+                return line
                 break
             elif user_cmd == 'n':
                 this_dict.update('n', index)
+                return line
                 break
             elif user_cmd == 'p':
                 replacement_word = input("Replacement word: ")
-                word_list[index] = replacement_word
+                line = re.sub(word, replacement_word, line, flags=re.IGNORECASE)
                 this_dict.update('p', word, replacement=replacement_word)
+                return line
                 break
             elif user_cmd == 'e':
+                return line
                 raise ExitByUser
             else:
                 continue
@@ -107,7 +112,7 @@ if __name__ == '__main__':
             index = 0
             for word in word_list:
                 if not this_dict.verify(word):
-                    this_dict.user_prompt(word, index)
+                    line = this_dict.user_prompt(word, index, line)
                 else:
                     index += 1
                     continue
