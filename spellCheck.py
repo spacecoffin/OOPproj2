@@ -52,20 +52,22 @@ class Dictionary:
             user_cmd = user_cmd.lower()
             if user_cmd == 'i':
                 break
-            if user_cmd == 'r':
+            elif user_cmd == 'r':
                 replacement_word = input("Replacement word: ")
                 split_line[index] = replacement_word
                 break
-            if user_cmd == 'n':
+            elif user_cmd == 'n':
                 this_dict.update('n', index)
                 break
-            if user_cmd == 'p':
+            elif user_cmd == 'p':
                 replacement_word = input("Replacement word: ")
                 split_line[index] = replacement_word
-                this_dict.update('p', index, replacement=replacement_word)
+                this_dict.update('p', word, replacement=replacement_word)
                 break
-            if user_cmd == 'e':
+            elif user_cmd == 'e':
                 raise ExitByUser
+            else:
+                continue
 
     def __iter__(self):
         return self
@@ -77,10 +79,16 @@ class ExitByUser(Exception):
     pass
 
 def parse_line(line):
+    split_line = re.split(r'[^a-z]+', line, flags=re.IGNORECASE)
     word_list = []
-    for word in split_line:
-        if len(word) >= 2:
-            word_list.append(word)
+    lower_list = []
+    for x in split_line:
+        if len(x) >= 1:
+            if x.lower() not in lower_list:
+                word_list.append(x)
+                lower_list.append(x.lower())
+            else:
+                continue
         else:
             continue
     return word_list
@@ -91,11 +99,12 @@ if __name__ == '__main__':
         # Prompt user for the name of a document she wants spell-checked.
         file_name = input("Name of the document to be spell-checked: ")
         file = open(file_name)
+        file_out_name = file_name + '.tmp'
+        output = open(file_out_name, 'w')
         # spellCheck should read words from the specified document,
         # one-by-one and test if the words appears in its dictionary.
         for line in file.readlines():
-            split_line = re.split(r'[^a-z]+', line, flags=re.IGNORECASE)
-            word_list = parse_line(split_line)
+            word_list = parse_line(line)
             index = 0
             for word in word_list:
                 if not this_dict.verify(word):
@@ -104,10 +113,17 @@ if __name__ == '__main__':
                     index += 1
                     continue
             else:
+                for 
+                """
+                for replacement in this_dict.replace_dict():
+                    this_dict.replace_dict[]
+                    checked_line = re.sub()
+                output.write(checked_line)
+                """
                 continue
     except IOError:
         # FileNotFoundError IS NEW FOR 3.3! 3.2 uses IOError!
-        print("***Unable to read file \'{}\'!***\n".format(f))
+        print("***Unable to read file \'{}\'!***\n".format(file_name))
     except ExitByUser:
         # User chose 'e' to exit in prompt
         # CLEANUP ACTIONS HERE
